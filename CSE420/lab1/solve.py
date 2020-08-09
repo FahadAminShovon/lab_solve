@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Set
 import re
 
-KEYWORD_REGEX = "int|float|double|string|if|else"
-MATH_OPERATOR_REGEX = "\+|-|\*|\/|\="
+KEYWORD_REGEX = "int|float|double|string|if|else|char|long|byte|bool|break|for|continue"
+MATH_OPERATOR_REGEX = "\+|-|\*|/"
 LOGICAL_OPERATOR_REGEX = "\>|\<|(==)|(\>=)"
 OTHERS_REGEX = ",|\;|\|\(|\)|\{|\}|\[|\]"
 IDENTIFIER_REGEX = "^[A-Za-z_][A-Za-z0-9_]*"
@@ -30,7 +30,7 @@ class Solve:
         string.strip()
         return string.split()
 
-    def matcher(self, string:str, regex:str, items:set, identifier_of_numeric=False )->List:
+    def matcher(self, string:str, regex:str, items:set, identifier_of_numeric=False ) -> Set:
         if identifier_of_numeric:
             if re.match(KEYWORD_REGEX, string) or re.match(OTHERS_REGEX, string):
                 return items
@@ -51,13 +51,31 @@ class Solve:
             self.matcher(word, IDENTIFIER_REGEX, self.identifier_list, identifier_of_numeric=True)
             self.matcher(word, NUMERIC_REGEX, self.numeric_list, identifier_of_numeric=True)
 
+
     def remove_symbol(self, string:str):
-        symbols = "+-*/++--,;><>=<==="
+        symbols = "+-*/++--,;><>=<=="
+
+        if(re.search("\+\+", string)):
+            self.math_operator_list.add("++");
+        elif(re.search("--", string)):
+            self.math_operator_list.add("--");
+        elif(re.search("-=", string)):
+            self.math_operator_list.add("-=");
+        elif(re.search("\+=", string)):
+            self.math_operator_list.add("+=");
+        elif(re.search("\*-", string)):
+            self.math_operator_list.add("*=");
+        elif(re.search("/=", string)):
+            self.math_operator_list.add("/=");
+
         if (len(string) > 1):
             if string[-1] in symbols:
                 string = string[:-1]
             elif string[0] in symbols:
                 string = string[1:]
+        if (len(string) > 2):
+            postfix = string[-2:-1]
+            prefix = string[0:2]
         return string
 
     def printer(self, name:str, lst:set):
