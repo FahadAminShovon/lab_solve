@@ -31,8 +31,8 @@ class Solve:
                 string = string[1:]
         return string
 
-    def matcher(self,string,regex,items:set, identifier=False, numeric=False)->List:
-        if identifier or numeric:
+    def matcher(self,string,regex,items:set, identifier_of_numeric=False)->List:
+        if identifier_of_numeric:
             if re.match(KEYWORD_REGEX, string) or re.match(OTHERS_REGEX, string):
                 return items
             string = self.remove_symbol(string)
@@ -49,8 +49,8 @@ class Solve:
             self.matcher(word, MATH_OPERATOR_REGEX, self.math_operator_list)
             self.matcher(word, LOGICAL_OPERATOR_REGEX, self.logical_operator_list)
             self.matcher(word, OTHERS_REGEX, self.others_list)
-            self.matcher(word, IDENTIFIER_REGEX, self.identifier_list, identifier=True)
-            self.matcher(word, NUMERIC_REGEX, self.numeric_list, identifier=True)
+            self.matcher(word, IDENTIFIER_REGEX, self.identifier_list, identifier_of_numeric=True)
+            self.matcher(word, NUMERIC_REGEX, self.numeric_list, identifier_of_numeric=True)
 
     def printer(self, name, lst):
         print(name, end =": ");
@@ -68,16 +68,11 @@ class Solve:
         self.printer("Numerical Values", self.numeric_list)   
         self.printer("Others", self.others_list)   
 
-
     def analyze(self):
         with open(self.file, 'r') as file:
             Lines = file.readlines()
             for line in Lines:
                 self.parser(line)
-        
-
-
-
 
 
 if __name__ == "__main__":
