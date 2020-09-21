@@ -27,6 +27,7 @@ class Solve:
 		print('Methods: ')
 		for result in self.results:
 			print(f'{result[0]}, return type: {result[1]}')
+		print()
 
 
 
